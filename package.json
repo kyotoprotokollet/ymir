@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "gulp": "^3.9.0",
+    "gulp-email-builder": "^1.0.4",
     "gulp-jade": "^1.1.0"
   },
   "devDependencies": {

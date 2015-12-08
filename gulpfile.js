@@ -1,9 +1,25 @@
 //-----------------------------------------------------
 // ### REQUIREMENTS
 //-------------------
-var gulp      = require('gulp'),
-    jade 			= require('gulp-jade'),
-    sass 			= require('gulp-sass');
+var gulp          = require('gulp'),
+    jade 			    = require('gulp-jade'),
+    sass 			    = require('gulp-sass'),
+    del             = require('del'),
+    emailBuilder  = require('gulp-email-builder');
+
+//-----------------------------------------------------
+// ### Clean
+// `gulp clean`
+//-------------------
+// Clean our compiled folder before we generate new content into it
+gulp.task('clean', function (cb) {
+    del([
+        // here we use a globbing pattern to match everything inside the `compiled` folder, except our gitkeep file
+        'compiled/**/*',
+        ], { dot: true },
+    cb);
+});
+
 
 //-----------------------------------------------------
 // ### Build Jade templates
@@ -31,8 +47,18 @@ gulp.task('compile-scss', function () {
 });
 
 //-----------------------------------------------------
+// ### Inline CSS, send tests
+// `gulp compile-css`
+//-------------------
+ gulp.task('emailBuilder', function() {
+    return gulp.src(['./compiled/templates/*.html'])
+      .pipe(emailBuilder())
+      .pipe(gulp.dest('./compiled/templates/finished'));
+  });
+
+//-----------------------------------------------------
 // ### Build
 // `gulp build` - Do a complete build
 //-------------------
-gulp.task('build', ['templates', 'compile-scss'], function() {
+gulp.task('build', ['clean', 'compile-scss', 'templates', 'emailBuilder'], function() {
 });
