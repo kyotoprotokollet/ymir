@@ -4,8 +4,9 @@
 var gulp          = require('gulp'),
     jade 			    = require('gulp-jade'),
     sass 			    = require('gulp-sass'),
-    del             = require('del'),
-    emailBuilder  = require('gulp-email-builder');
+    del           = require('del'),
+    emailBuilder  = require('gulp-email-builder'),
+    runSequence   = require('gulp-run-sequence');
 
 //-----------------------------------------------------
 // ### Clean
@@ -53,12 +54,18 @@ gulp.task('compile-scss', function () {
  gulp.task('emailBuilder', function() {
     return gulp.src(['./compiled/templates/*.html'])
       .pipe(emailBuilder())
-      .pipe(gulp.dest('./compiled/templates/finished'));
+      .pipe(gulp.dest('./compiled/templates/'));
   });
 
 //-----------------------------------------------------
 // ### Build
-// `gulp build` - Do a complete build
+// `gulp build` - Clean up the builds directory and do a complete build.
 //-------------------
-gulp.task('build', ['clean', 'compile-scss', 'templates', 'emailBuilder'], function() {
+gulp.task('build', function(callback) {
+  runSequence(
+    'clean',
+    'compile-scss',
+    'templates',
+    'emailBuilder',
+  callback);
 });
