@@ -9,6 +9,43 @@ var gulp          = require('gulp'),
     runSequence   = require('gulp-run-sequence');
 
 //-----------------------------------------------------
+// ### CONFIGURATION
+//-------------------
+// Settings
+require('dotenv').config({path: '.env'});
+
+// Personal settings are defined by you in the .env file
+var config = {
+  emailRecipient      :  process.env.emailRecipient,
+  emailUser      :  process.env.emailUser,
+  emailPassword  :  process.env.emailPassword,
+};
+
+// Email options
+var options = {
+  emailTest : {
+
+  // Your Email
+  email : config.emailRecipient,
+
+  // Your email Subject
+  subject : 'Email Subject',
+
+  // Optional
+  transport: {
+    type: 'SMTP',
+    options: {
+      service: 'gmail',
+      auth: {
+        user: config.emailUser,
+        pass: config.emailPassword
+      }
+    }
+  }
+}
+};
+
+//-----------------------------------------------------
 // ### Clean
 // `gulp clean`
 //-------------------
@@ -21,6 +58,15 @@ gulp.task('clean', function (cb) {
     cb);
 });
 
+//-----------------------------------------------------
+// ### Compile SCSS
+// `gulp compile-css`
+//-------------------
+gulp.task('compile-scss', function () {
+  gulp.src('./src/scss/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./compiled/css'));
+});
 
 //-----------------------------------------------------
 // ### Build Jade templates
@@ -38,23 +84,13 @@ gulp.task('templates', function() {
 });
 
 //-----------------------------------------------------
-// ### Compile SCSS
-// `gulp compile-css`
-//-------------------
-gulp.task('compile-scss', function () {
-  gulp.src('./src/scss/*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./compiled/css'));
-});
-
-//-----------------------------------------------------
 // ### Inline CSS, send tests
 // `gulp compile-css`
 //-------------------
- gulp.task('emailBuilder', function() {
+ gulp.task('emailBuilder', ['templates'], function() {
     return gulp.src(['./compiled/templates/*.html'])
-      .pipe(emailBuilder())
-      .pipe(gulp.dest('./compiled/templates/test.html'));
+      .pipe(emailBuilder(options))
+      .pipe(gulp.dest('./compiled/templates/'));
   });
 
 //-----------------------------------------------------
