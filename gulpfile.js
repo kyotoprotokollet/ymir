@@ -87,7 +87,7 @@ gulp.task('templates', function() {
 // ### Inline CSS, send tests
 // `gulp compile-css`
 //-------------------
- gulp.task('emailBuilder', ['templates'], function() {
+ gulp.task('emailBuilder', function() {
     return gulp.src(['./compiled/templates/*.html'])
       .pipe(emailBuilder(options))
       .pipe(gulp.dest('./compiled/templates/'));
