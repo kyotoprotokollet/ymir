@@ -54,7 +54,7 @@ gulp.task('compile-scss', function () {
  gulp.task('emailBuilder', function() {
     return gulp.src(['./compiled/templates/*.html'])
       .pipe(emailBuilder())
-      .pipe(gulp.dest('./compiled/templates/'));
+      .pipe(gulp.dest('./compiled/templates/test.html'));
   });
 
 //-----------------------------------------------------
