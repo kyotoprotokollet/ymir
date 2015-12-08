@@ -17,8 +17,8 @@ require('dotenv').config({path: '.env'});
 // Personal settings are defined by you in the .env file
 var config = {
   emailRecipient      :  process.env.emailRecipient,
-  emailUser      :  process.env.emailUser,
-  emailPassword  :  process.env.emailPassword,
+  emailUser           :  process.env.emailUser,
+  emailPassword       :  process.env.emailPassword,
 };
 
 // Email options
